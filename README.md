@@ -20,6 +20,10 @@ Architecture:
   [Agent 3] Report Generator    (Claude Opus 4.6 streaming)
 ```
 
+## UI
+
+![Streamlit dashboard showing sensor time-series plots with anomaly highlights and a streaming Claude-generated diagnostic report](assets/screenshot.png)
+
 ## Gaps Covered
 
 | Gap | How |
