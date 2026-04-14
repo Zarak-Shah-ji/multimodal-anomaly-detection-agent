@@ -24,16 +24,6 @@ Architecture:
 
 ![Streamlit dashboard showing sensor time-series plots with anomaly highlights and a streaming Claude-generated diagnostic report](assets/screenshot.png)
 
-## Gaps Covered
-
-| Gap | How |
-|-----|-----|
-| Multimodal AI (telemetry + text) | Sensor time-series + maintenance logs ingested together |
-| Knowledge Graphs | Neo4j KG: Sensor → Component → FailureMode |
-| GraphRAG | TF-IDF index over KG subgraph descriptions, retrieved by anomaly query |
-| LangGraph | 3-node agent pipeline with typed state |
-| LLM fine-tuning concepts | Adaptive thinking on Claude Opus 4.6 |
-
 ## Setup
 
 ### 1. Install dependencies
