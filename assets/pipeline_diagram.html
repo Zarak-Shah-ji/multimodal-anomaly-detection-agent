@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>LangGraph Pipeline — Multimodal Anomaly Detection</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      background: #0d1117;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: #c9d1d9;
+    }
+    h1 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #e6edf3;
+    }
+    p.sub {
+      font-size: 0.85rem;
+      color: #8b949e;
+      margin: 0 0 32px;
+    }
+    .mermaid {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 32px 40px;
+      max-width: 900px;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <h1>LangGraph State Graph — Multimodal Anomaly Detection Agent</h1>
+  <p class="sub">Nodes · Edges · PipelineState fields</p>
+
+  <div class="mermaid">
+graph TD
+    START([__START__]) --> AD
+
+    AD["🔍 anomaly_detection_node
+    ─────────────────────
+    Reads: sensor_df, logs_df, unit
+    Writes: anomalies, anomaly_analysis"]
+
+    KG["🕸️ kg_query_node
+    ─────────────────────
+    Reads: anomalies
+    Writes: kg_context"]
+
+    RG["📄 report_generation_node
+    ─────────────────────
+    Reads: unit, sensor_df, logs_df,
+    anomaly_analysis, kg_context, anomalies
+    Writes: report"]
+
+    END_NODE([__END__])
+
+    AD -->|"anomalies: list[dict]
+anomaly_analysis: str"| KG
+    KG -->|"kg_context: str"| RG
+    RG -->|"report: str"| END_NODE
+
+    subgraph PipelineState["📦 PipelineState  TypedDict"]
+        S1["unit: int"]
+        S2["sensor_df: DataFrame"]
+        S3["logs_df: DataFrame"]
+        S4["anomalies: list[dict]"]
+        S5["anomaly_analysis: str"]
+        S6["kg_context: str"]
+        S7["report: str"]
+        S8["error: Optional[str]"]
+    end
+
+    style START fill:#238636,color:#fff,stroke:#2ea043
+    style END_NODE fill:#da3633,color:#fff,stroke:#f85149
+    style AD fill:#1f6feb,color:#fff,stroke:#388bfd
+    style KG fill:#8957e5,color:#fff,stroke:#a371f7
+    style RG fill:#e3b341,color:#000,stroke:#d29922
+    style PipelineState fill:#1c2128,color:#8b949e,stroke:#30363d
+    style S1 fill:#21262d,color:#c9d1d9,stroke:#30363d
+    style S2 fill:#21262d,color:#c9d1d9,stroke:#30363d
+    style S3 fill:#21262d,color:#c9d1d9,stroke:#30363d
+    style S4 fill:#21262d,color:#c9d1d9,stroke:#30363d
+    style S5 fill:#21262d,color:#c9d1d9,stroke:#30363d
+    style S6 fill:#21262d,color:#c9d1d9,stroke:#30363d
+    style S7 fill:#21262d,color:#c9d1d9,stroke:#30363d
+    style S8 fill:#21262d,color:#c9d1d9,stroke:#30363d
+  </div>
+
+  <script>
+    mermaid.initialize({ startOnLoad: true, theme: "dark" });
+  </script>
+</body>
+</html>
