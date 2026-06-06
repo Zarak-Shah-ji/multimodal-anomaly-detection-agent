@@ -2,6 +2,7 @@
 
 **HP Advanced AI Scientist Interview Demo**
 
+**Deployed demo: https://multimodal-anomaly-detection-agent-apyl87pnmldujdrnhhpfqn.streamlit.app/**
 A production-quality demo combining time-series sensor data, text maintenance logs, a Neo4j knowledge graph, GraphRAG retrieval, and a 3-agent LangGraph pipeline — all surfaced through a Streamlit UI.
 
 ```
