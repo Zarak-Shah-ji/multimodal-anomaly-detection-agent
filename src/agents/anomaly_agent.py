@@ -7,6 +7,7 @@ Returns a list of anomaly dicts with sensor, severity, description.
 
 import os
 import google.generativeai as genai
+from google.api_core import exceptions as api_exceptions
 import pandas as pd
 from src.data.loader import SENSOR_NAMES, compute_rolling_stats
 
@@ -114,5 +115,24 @@ def analyze_anomalies_with_claude(
     prompt = _build_anomaly_prompt(sensor_df, logs_df, anomalies, unit)
     model  = _get_model()
 
-    response = model.generate_content(prompt)
-    return response.text.strip()
+    try:
+        response = model.generate_content(prompt)
+        return response.text.strip()
+    except api_exceptions.NotFound as e:
+        # Model or resource not found (e.g., invalid model name or account access)
+        # Return a deterministic fallback analysis so the app doesn't crash on Streamlit.
+        top = anomalies[0]
+        sensors = ", ".join(a["sensor"] for a in anomalies[:3])
+        fallback = (
+            "LLM unavailable (model not found). Falling back to deterministic analysis. "
+            f"Top anomalous sensors: {sensors}. Likely affected subsystem(s) related to {top['sensor']}. "
+            "Severity: " + top["severity"] + ". Recommend immediate inspection and detailed offline analysis."
+        )
+        return fallback
+    except Exception:
+        # Generic fallback for any other API/runtime errors
+        sensors = ", ".join(a["sensor"] for a in anomalies[:3])
+        return (
+            "LLM error encountered. Fallback analysis: "
+            f"Detected anomalies on sensors: {sensors}. Check API credentials or model availability."
+        )
